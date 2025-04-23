@@ -1,5 +1,5 @@
 
-name: aseprite
+name: aseprite-auto-built
 
 on:
   workflow_dispatch:
@@ -22,12 +22,6 @@ jobs:
         run: call build.cmd
         env:
           ASEPRITE_VERSION: ${{ github.event.inputs.version }}
-
-      - name: Get version
-        id: get_version
-        run: |
-          $version = Get-Content version.txt
-          echo "version=$version" >> $env:GITHUB_OUTPUT
       
       - name: Archive
         uses: actions/upload-artifact@v4
@@ -39,7 +33,7 @@ jobs:
       - name: GH Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}
-          tag_name: ${{ steps.get_version.outputs.version }}
+          name: Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}
+          tag_name: ${{ steps.build.outputs.ASEPRITE_VERSION }}
           files: |
-            Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}.zip
+            Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip
