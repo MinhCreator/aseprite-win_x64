@@ -23,9 +23,23 @@ jobs:
         env:
           ASEPRITE_VERSION: ${{ github.event.inputs.version }}
 
+      - name: Get version
+        id: get_version
+        run: |
+          $version = Get-Content version.txt
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+      
       - name: Archive
         uses: actions/upload-artifact@v4
         with:
           name: aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}
           path: github
           if-no-files-found: error
+      
+      - name: GH Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          files: |
+            Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}.zip
