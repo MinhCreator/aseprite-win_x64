@@ -33,7 +33,8 @@ jobs:
       - name: GH Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}
+          name: aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}
+          path: github 
           tag_name: ${{ steps.build.outputs.ASEPRITE_VERSION }}
           files: |
-            Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip
+            aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip
