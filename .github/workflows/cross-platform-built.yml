@@ -15,18 +15,15 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: ubuntu-latest
-            platform: ubuntu-debian
-            artifact_name: aseprite-ubuntu-debian
+            platform: linux
+            artifact_name: aseprite-linux
           - os: macos-latest
             platform: macos
             artifact_name: aseprite-macos
           - os: windows-latest
             platform: windows
             artifact_name: aseprite-windows
-          - os: arch-latest
-            platform: arch
-            artifact_name: aseprite-arch
-    
+
     runs-on: ${{ matrix.os }}
     
     steps:
@@ -39,15 +36,13 @@ jobs:
 
     - name: Setup build dependencies
       run: |
-        if [ "${{ matrix.platform }}" == "ubuntu-debian" ]; then
+        if [ "${{ matrix.platform }}" == "linux" ]; then
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build libx11-dev libxcursor-dev libxi-dev libgl1-mesa-dev libfontconfig1-dev
         elif [ "${{ matrix.platform }}" == "macos" ]; then
           brew install cmake ninja
         elif [ "${{ matrix.platform }}" == "windows" ]; then
           choco install cmake ninja
-        elif [ "${{ matrix.platform }}" == "arch" ]; then
-          sudo pacman -S gcc clang libc++ cmake ninja libx11 libxcursor mesa-libgl fontconfig libwebp
         fi
       shell: bash
 
@@ -67,14 +62,12 @@ jobs:
     - name: Package Aseprite
       run: |
         mkdir artifact
-        if [ "${{ matrix.platform }}" == "ubuntu-debian" ]; then
+        if [ "${{ matrix.platform }}" == "linux" ]; then
           cp -r build/bin/aseprite artifact/
         elif [ "${{ matrix.platform }}" == "macos" ]; then
           cp -r build/bin/Aseprite.app artifact/
         elif [ "${{ matrix.platform }}" == "windows" ]; then
           cp -r build/bin/aseprite.exe artifact/
-        elif [ "${{ matrix.platform }}" == "arch" ]; then
-          cp -r build/bin/aseprite artifact/
         fi
       shell: bash
 
@@ -95,8 +88,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          aseprite-ubuntu-debian/*
+          aseprite-linux/*
           aseprite-macos/*
           aseprite-windows/*
-          aseprite-arch/*
         tag_name: ${{ github.event.inputs.aseprite_version || 'latest' }}
