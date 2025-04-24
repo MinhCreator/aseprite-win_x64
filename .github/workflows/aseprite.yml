@@ -29,11 +29,16 @@ jobs:
           name: aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}
           path: github
           if-no-files-found: error
-      
+
+      - name: Zip Aseprite
+        run: |
+          cd build/bin
+          7z a ../../Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip *
+
       - name: GH Release
         uses: softprops/action-gh-release@v2
         with:
-          name: aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}
+          name: Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}
           tag_name: ${{ steps.build.outputs.ASEPRITE_VERSION }}
           files: |
-            aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip
+            Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip
