@@ -15,8 +15,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Build
+      
+      - name: Windows Build
         id: build
         shell: cmd
         run: call build.cmd
@@ -35,7 +35,7 @@ jobs:
           cd build/bin
           7z a ../../Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}.zip *
 
-      - name: GH Release
+      - name: GitHub Released
         uses: softprops/action-gh-release@v2
         with:
           name: Aseprite-Windows-x64-${{ steps.build.outputs.ASEPRITE_VERSION }}
