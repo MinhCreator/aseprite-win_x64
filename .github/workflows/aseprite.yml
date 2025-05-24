@@ -2,12 +2,14 @@
 name: aseprite-auto-built
 
 on:
+  repository_dispatch:
+    types: [build]
   workflow_dispatch:
     inputs:
       version:
         description: "Version to build, leave empty for latest"
         required: false
-
+  
 jobs:
   build:
     runs-on: windows-2022
@@ -29,6 +31,15 @@ jobs:
           name: aseprite-${{ steps.build.outputs.ASEPRITE_VERSION }}
           path: github
           if-no-files-found: error
+      
+      - name: save version build
+        run: |
+          git config user.email "92376650+MinhCreator@users.noreply.github.com"
+          git config user.name "MinhCreator"
+          echo asprite-${{ steps.build.outputs.ASEPRITE_VERSION }} >> /build/version.txt
+          git add ./build
+          git commit -m "fetch aseprite version"
+          git push 
 
       - name: Zip Aseprite
         run: |

@@ -1,0 +1,44 @@
+name: RENEW
+on:
+  schedule:
+    - cron: '0 0 1,5,15,25,30 * *'
+  workflow_dispatch:
+    inputs:
+      name:
+          description: 'Run?'
+          required: true
+          default: 'YES!'
+
+  pull_request:
+  pull_request_target:
+
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+      - name: Git commit
+        run: |
+          git config user.email "92376650+MinhCreator@users.noreply.github.com"
+          git config user.name "MinhCreator"
+          echo $(date +'%d-%m-%y') >> keep_active_repo
+          git add .
+          git commit -m "Keep active repo"
+          git push 
+      
+      - name: Push File
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: ${{ github.ref }}
+
+      - name: trigger build
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          event-type: build
