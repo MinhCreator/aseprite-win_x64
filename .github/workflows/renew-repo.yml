@@ -19,13 +19,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
       - name: Git commit
         run: |
-          git config user.email "92376650+MinhCreator@users.noreply.github.com"
-          git config user.name "MinhCreator"
+          git config user.email "action@github.com"
+          git config user.name "GitHub Actions Bot"
           echo $(date +'%d-%m-%y') >> keep_active_repo
           git add .
           git commit -m "Keep active repo"
