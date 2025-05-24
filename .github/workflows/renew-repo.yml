@@ -29,6 +29,7 @@ jobs:
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
+          author_name: "MinhCreator"
           github_token: ${{ secrets.PAT }}
           message: "renew repo in $(date +'%d-%m-%y')"
 
