@@ -19,23 +19,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
-      - name: Git commit
+      - name: Create local changes
         run: |
-          git config user.email "action@github.com"
-          git config user.name "GitHub Actions Bot"
           echo $(date +'%d-%m-%y') >> keep_active_repo
-          git add .
-          git commit -m "Keep active repo"
-          git push 
       
-      - name: Push File
-        uses: ad-m/github-push-action@master
+      - name: Commit & Push changes
+        uses: actions-js/push@master
         with:
           github_token: ${{ secrets.PAT }}
-          branch: ${{ github.ref }}
+          message: "renew repo in $(date +'%d-%m-%y')"
 
       - name: trigger build
         uses: peter-evans/repository-dispatch@v3
